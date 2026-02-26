@@ -3,11 +3,12 @@ const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2WSZGibHfo4A
 fetch(sheetURL)
   .then(res => res.text())
   .then(data => {
-    const rows = data.split("\n").slice(1);
-    const container = document.getElementById("projects");
 
-    rows.forEach(row => {
-      const cols = row.split(",");
+    const rows = parseCSV(data);
+    const container = document.getElementById("projects");
+    container.innerHTML = "";
+
+    rows.slice(1).forEach(cols => {
       if(cols.length < 10) return;
 
       const card = document.createElement("div");
@@ -34,6 +35,35 @@ fetch(sheetURL)
       container.appendChild(card);
     });
   });
+
+function parseCSV(text) {
+  const rows = [];
+  const lines = text.split("\n");
+
+  lines.forEach(line => {
+    const result = [];
+    let current = "";
+    let insideQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+
+      if (char === '"' ) {
+        insideQuotes = !insideQuotes;
+      } else if (char === "," && !insideQuotes) {
+        result.push(current);
+        current = "";
+      } else {
+        current += char;
+      }
+    }
+
+    result.push(current);
+    rows.push(result);
+  });
+
+  return rows;
+}
 
 document.getElementById("search").addEventListener("input", function(){
   const keyword = this.value.toLowerCase();
