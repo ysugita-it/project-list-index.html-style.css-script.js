@@ -8,7 +8,7 @@ fetch(sheetURL)
 
     rows.forEach(row => {
       const cols = row.split(",");
-      if(cols.length < 7) return;
+      if(cols.length < 8) return;
 
       const card = document.createElement("div");
       card.className = "card";
@@ -20,11 +20,12 @@ fetch(sheetURL)
           <span class="badge">経験：${cols[2]}</span><br>
           エリア：${cols[3]}<br>
           稼働日数：${cols[4]}<br>
-          担当：${cols[6]}
+          業種：${cols[5]}<br>
+          担当：${cols[7]}
         </div>
         <div>
           <strong>業務内容</strong><br>
-          ${cols[5]}
+          ${cols[6]}
         </div>
       `;
 
