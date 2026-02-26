@@ -13,6 +13,28 @@
 <h1>案件一覧</h1>
 
 <input type="text" id="search" class="search" placeholder="キーワード検索">
+  
+<div class="filters">
+
+  <select id="filterIndustry">
+    <option value="">業種すべて</option>
+  </select>
+
+  <select id="filterExperience">
+    <option value="">経験すべて</option>
+  </select>
+
+  <select id="filterHoliday">
+    <option value="">休みすべて</option>
+  </select>
+
+  <div class="price-filter">
+    単価
+    <input type="number" id="minPrice" placeholder="最低"> 〜
+    <input type="number" id="maxPrice" placeholder="最高">
+  </div>
+
+</div>
 
 <div class="grid" id="projects"></div>
 
