@@ -1,0 +1,50 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #f5f6fa;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+}
+
+.search {
+  display: block;
+  margin: 20px auto;
+  padding: 10px;
+  width: 300px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  transition: 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.meta {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  margin-right: 6px;
+  background: #eef2ff;
+}
