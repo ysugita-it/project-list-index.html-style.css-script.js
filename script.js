@@ -16,8 +16,8 @@ fetch(sheetURL)
       card.innerHTML = `
         <h2>${cols[0]}</h2>
         <div class="meta">
-          <span class="badge">単価：${cols[1]}</span>
-          <span class="badge">経験：${cols[2]}</span><br>
+          単価：${cols[1]}</span>
+          経験：${cols[2]}</span><br>
           エリア：${cols[3]}<br>
           稼働日数：${cols[4]}<br>
           業種：${cols[5]}<br>
