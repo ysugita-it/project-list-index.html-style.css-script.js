@@ -21,11 +21,11 @@ fetch(sheetURL)
           エリア：${cols[3]}<br>
           稼働日数：${cols[4]}<br>
           業種：${cols[5]}<br>
-          担当：${cols[6]}
+          担当：${cols[7]}
         </div>
         <div>
           <strong>業務内容</strong><br>
-          ${cols[7]}
+          ${cols[6]}
         </div>
       `;
 
