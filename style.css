@@ -77,14 +77,12 @@ h1 {
 }
 
 .toggle-btn {
-  display: flex;              /* ← ここ重要 */
-  justify-content: center;    /* ← 横中央 */
-  align-items: center;        /* ← 縦中央 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   width: 100%;
-  margin-bottom: 12px;
   padding: 12px;
-  font-size: 14px;
 
   background: #333;
   color: #fff;
