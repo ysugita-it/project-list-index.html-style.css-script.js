@@ -16,63 +16,83 @@
   
 <div class="filters">
 
-  <div>
-    <strong>休み</strong><br>
-    <label><input type="checkbox" name="holiday" value="シフト制">シフト制</label>
-    <label><input type="checkbox" name="holiday" value="土日">土日</label>
-    <label><input type="checkbox" name="holiday" value="土日祝">土日祝</label>
+  <!-- 単価種別 -->
+  <div class="filter-group">
+    <span class="filter-title">単価種別</span>
+    <div class="tags">
+      <button class="tag" data-name="salaryType" data-value="時給">時給</button>
+      <button class="tag" data-name="salaryType" data-value="日給">日給</button>
+      <button class="tag" data-name="salaryType" data-value="月給">月給</button>
+    </div>
   </div>
 
-  <div>
-    <strong>経験</strong><br>
-    <label><input type="checkbox" name="experience" value="未経験">未経験NG</label>
-    <label><input type="checkbox" name="experience" value="微経験">未経験OK</label>
+  <!-- 並び替え -->
+  <div class="filter-group">
+    <span class="filter-title">並び替え</span>
+    <div class="tags">
+      <button class="tag" data-name="sort" data-value="desc">高 → 低</button>
+      <button class="tag" data-name="sort" data-value="asc">低 → 高</button>
+    </div>
   </div>
 
-  <div>
-    <strong>エリア</strong><br>
-    <label><input type="checkbox" name="area" value="東京">東京</label>
-    <label><input type="checkbox" name="area" value="千葉">千葉</label>
-    <label><input type="checkbox" name="area" value="埼玉">埼玉</label>
-    <label><input type="checkbox" name="area" value="神奈川">神奈川</label>
-    <label><input type="checkbox" name="area" value="大阪">大阪</label>
-    <label><input type="checkbox" name="area" value="福岡">福岡</label>
-    <label><input type="checkbox" name="area" value="愛知">愛知</label>
-    <label><input type="checkbox" name="area" value="地方">地方</label>
+  <!-- 休み -->
+  <div class="filter-group">
+    <span class="filter-title">休み</span>
+    <div class="tags">
+      <button class="tag" data-name="holiday" data-value="シフト制">シフト制</button>
+      <button class="tag" data-name="holiday" data-value="土日">土日</button>
+      <button class="tag" data-name="holiday" data-value="土日祝">土日祝</button>
+    </div>
   </div>
 
-  <div>
-    <strong>業種</strong><br>
-    <label><input type="checkbox" name="industry" value="アウトバウンド">アウトバウンド</label>
-    <label><input type="checkbox" name="industry" value="インバウンド">インバウンド</label>
-    <label><input type="checkbox" name="industry" value="通信">通信</label>
-    <label><input type="checkbox" name="industry" value="営業">営業</label>
-    <label><input type="checkbox" name="industry" value="事務">事務</label>
-    <label><input type="checkbox" name="industry" value="その他">その他</label>
+  <!-- 経験 -->
+  <div class="filter-group">
+    <span class="filter-title">経験</span>
+    <div class="tags">
+      <button class="tag" data-name="experience" data-value="未経験">未経験</button>
+      <button class="tag" data-name="experience" data-value="微経験">微経験</button>
+      <button class="tag" data-name="experience" data-value="経験">経験</button>
+    </div>
   </div>
 
-  <div>
-    <strong>交通費</strong><br>
-    <label><input type="checkbox" name="transport" value="別">別</label>
-    <label><input type="checkbox" name="transport" value="込">込</label>
+  <!-- エリア -->
+  <div class="filter-group">
+    <span class="filter-title">エリア</span>
+    <div class="tags">
+      <button class="tag" data-name="area" data-value="東京">東京</button>
+      <button class="tag" data-name="area" data-value="千葉">千葉</button>
+      <button class="tag" data-name="area" data-value="埼玉">埼玉</button>
+      <button class="tag" data-name="area" data-value="神奈川">神奈川</button>
+      <button class="tag" data-name="area" data-value="大阪">大阪</button>
+      <button class="tag" data-name="area" data-value="福岡">福岡</button>
+      <button class="tag" data-name="area" data-value="愛知">愛知</button>
+      <button class="tag" data-name="area" data-value="地方">地方</button>
+    </div>
   </div>
 
-  <div>
-    <strong>単価</strong><br>
-    <label><input type="checkbox" id="highPrice">高単価</label>
+  <!-- 業種 -->
+  <div class="filter-group">
+    <span class="filter-title">業種</span>
+    <div class="tags">
+      <button class="tag" data-name="industry" data-value="アウトバウンド">アウトバウンド</button>
+      <button class="tag" data-name="industry" data-value="インバウンド">インバウンド</button>
+      <button class="tag" data-name="industry" data-value="通信">通信</button>
+      <button class="tag" data-name="industry" data-value="営業">営業</button>
+      <button class="tag" data-name="industry" data-value="事務">事務</button>
+      <button class="tag" data-name="industry" data-value="その他">その他</button>
+    </div>
   </div>
 
-  <div>
-    <strong>並び替え</strong><br>
-    <select id="sortPrice">
-      <option value="">なし</option>
-      <option value="asc">単価：低 → 高</option>
-      <option value="desc">単価：高 → 低</option>
-    </select>
+  <!-- 交通費 -->
+  <div class="filter-group">
+    <span class="filter-title">交通費</span>
+    <div class="tags">
+      <button class="tag" data-name="transport" data-value="別">別</button>
+      <button class="tag" data-name="transport" data-value="込">込</button>
+    </div>
   </div>
 
 </div>
-
 <div class="grid" id="projects"></div>
 
 <!-- JS読み込み -->
