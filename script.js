@@ -2,9 +2,9 @@ const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2WSZGibHfo4A
 
 fetch(sheetURL)
   .then(res => res.text())
-  .then(data => {
+  .then(text => {
 
-    const rows = parseCSV(data);
+    const rows = parseCSV(text);
     const container = document.getElementById("projects");
     container.innerHTML = "";
 
@@ -12,77 +12,90 @@ fetch(sheetURL)
       if(cols.length < 10) return;
 
       const card = document.createElement("div");
-card.className = "card";
+      card.className = "card";
 
-card.dataset.holiday = cols[6];
-card.dataset.experience = cols[3];
-card.dataset.area = cols[4];
-card.dataset.industry = cols[8];
-card.dataset.transport = cols[2];
-card.dataset.price = parseInt(cols[1].replace(/[^0-9]/g,"")) || 0;
+      // ✅ データ整形（trim超重要）
+      const price = parseInt(cols[1].replace(/[^0-9]/g,"")) || 0;
 
+      card.dataset.holiday = (cols[6] || "").trim();
+      card.dataset.experience = (cols[3] || "").trim();
+      card.dataset.area = (cols[4] || "").trim();
+      card.dataset.industry = (cols[8] || "").trim();
+      card.dataset.transport = (cols[2] || "").trim();
+      card.dataset.price = price;
 
-card.innerHTML = `
-  <h2>${cols[0]}</h2>
-  <div class="meta">
-    単価：${cols[1]}<br>
-    交通費：${cols[2]}<br>
-    経験有無：${cols[3]}<br>
-    エリア：${cols[4]}<br>
-    稼働日数：${cols[5]}<br>
-    休み：${cols[6]}<br>
-    業種：${cols[8]}<br>
-    担当：${cols[9]}
-  </div>
-  <div>
-    <strong>業務内容</strong><br>
-    ${cols[7]}
-  </div>
-`;
+      // ✅ 表示
+      card.innerHTML = `
+        <h2>${cols[0]}</h2>
+        <div class="meta">
+          単価：${cols[1]}<br>
+          交通費：${cols[2]}<br>
+          経験有無：${cols[3]}<br>
+          エリア：${cols[4]}<br>
+          稼働日数：${cols[5]}<br>
+          休み：${cols[6]}<br>
+          業種：${cols[8]}<br>
+          担当：${cols[9]}
+        </div>
+        <div>
+          <strong>業務内容</strong><br>
+          ${cols[7]}
+        </div>
+      `;
 
       container.appendChild(card);
     });
+
+    // 初回フィルター実行
+    applyFilters();
   });
 
+
+// =====================
+// CSVパーサー（改良版）
+// =====================
 function parseCSV(text) {
   const rows = [];
-  const lines = text.split("\n");
+  let row = [];
+  let current = '';
+  let insideQuotes = false;
 
-  lines.forEach(line => {
-    const result = [];
-    let current = "";
-    let insideQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    const next = text[i + 1];
 
-    for (let i = 0; i < line.length; i++) {
-      const char = line[i];
-
-      if (char === '"' ) {
-        insideQuotes = !insideQuotes;
-      } else if (char === "," && !insideQuotes) {
-        result.push(current);
-        current = "";
-      } else {
-        current += char;
+    if (char === '"' && insideQuotes && next === '"') {
+      current += '"';
+      i++;
+    } else if (char === '"') {
+      insideQuotes = !insideQuotes;
+    } else if (char === ',' && !insideQuotes) {
+      row.push(current);
+      current = '';
+    } else if ((char === '\n' || char === '\r') && !insideQuotes) {
+      if (current || row.length) {
+        row.push(current);
+        rows.push(row);
+        row = [];
+        current = '';
       }
+    } else {
+      current += char;
     }
+  }
 
-    result.push(current);
-    rows.push(result);
-  });
+  if (current || row.length) {
+    row.push(current);
+    rows.push(row);
+  }
 
   return rows;
 }
 
-document.getElementById("search").addEventListener("input", function(){
-  const keyword = this.value.toLowerCase();
-  document.querySelectorAll(".card").forEach(card=>{
-    card.style.display =
-      card.innerText.toLowerCase().includes(keyword)
-        ? "block"
-        : "none";
-  });
-});
 
+// =====================
+// フィルター処理
+// =====================
 document.querySelectorAll("input, select").forEach(el => {
   el.addEventListener("input", applyFilters);
   el.addEventListener("change", applyFilters);
@@ -90,11 +103,12 @@ document.querySelectorAll("input, select").forEach(el => {
 
 function getChecked(name) {
   return Array.from(document.querySelectorAll(`input[name=${name}]:checked`))
-    .map(el => el.value);
+    .map(el => el.value.trim());
 }
 
 function applyFilters() {
-  const keyword = document.getElementById("search").value.toLowerCase();
+
+  const keyword = (document.getElementById("search").value || "").toLowerCase().trim();
 
   const holiday = getChecked("holiday");
   const experience = getChecked("experience");
@@ -109,14 +123,17 @@ function applyFilters() {
 
   cards.forEach(card => {
 
-    const matchKeyword = card.innerText.toLowerCase().includes(keyword);
-    const matchHoliday = !holiday.length || holiday.includes(card.dataset.holiday);
-    const matchExperience = !experience.length || experience.includes(card.dataset.experience);
+    const text = card.innerText.toLowerCase();
+
+    const matchKeyword = text.includes(keyword);
+
+    const matchHoliday = !holiday.length || holiday.some(h => card.dataset.holiday.includes(h));
+    const matchExperience = !experience.length || experience.some(e => card.dataset.experience.includes(e));
     const matchArea = !area.length || area.some(a => card.dataset.area.includes(a));
     const matchIndustry = !industry.length || industry.some(i => card.dataset.industry.includes(i));
-    const matchTransport = !transport.length || transport.includes(card.dataset.transport);
+    const matchTransport = !transport.length || transport.some(t => card.dataset.transport.includes(t));
 
-    const price = parseInt(card.dataset.price);
+    const price = parseInt(card.dataset.price) || 0;
     const matchHighPrice = !highPrice || (price >= 2200 || price >= 400000);
 
     card.style.display =
