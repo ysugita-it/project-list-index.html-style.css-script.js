@@ -167,12 +167,20 @@ function applyFilters(){
 const toggleBtn = document.getElementById("toggleFilter");
 const filterBox = document.getElementById("filterBox");
 
-toggleBtn.addEventListener("click", () => {
-  if(filterBox.style.display === "none"){
-    filterBox.style.display = "block";
-    toggleBtn.textContent = "検索条件を閉じる";
-  } else {
-    filterBox.style.display = "none";
-    toggleBtn.textContent = "検索条件の選択";
-  }
+document.addEventListener("DOMContentLoaded", () => {
+
+  const toggleBtn = document.getElementById("toggleFilter");
+  const filterBox = document.getElementById("filterBox");
+
+  if(!toggleBtn || !filterBox) return;
+
+  toggleBtn.addEventListener("click", () => {
+    const isHidden = filterBox.style.display === "none";
+
+    filterBox.style.display = isHidden ? "block" : "none";
+    toggleBtn.textContent = isHidden
+      ? "検索条件を閉じる"
+      : "検索条件の選択";
+  });
+
 });
