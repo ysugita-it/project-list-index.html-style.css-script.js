@@ -170,9 +170,9 @@ const filterBox = document.getElementById("filterBox");
 toggleBtn.addEventListener("click", () => {
   if(filterBox.style.display === "none"){
     filterBox.style.display = "block";
-    toggleBtn.textContent = "− フィルターを閉じる";
+    toggleBtn.textContent = "検索条件を閉じる";
   } else {
     filterBox.style.display = "none";
-    toggleBtn.textContent = "＋ フィルターを開く";
+    toggleBtn.textContent = "検索条件の選択";
   }
 });
