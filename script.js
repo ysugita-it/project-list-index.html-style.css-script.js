@@ -84,6 +84,7 @@ document.getElementById("search").addEventListener("input", function(){
 });
 
 document.querySelectorAll("input, select").forEach(el => {
+  el.addEventListener("input", applyFilters);
   el.addEventListener("change", applyFilters);
 });
 
