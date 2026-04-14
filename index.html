@@ -14,11 +14,27 @@
 
 <input type="text" id="search" class="search" placeholder="キーワード検索">
   
-<div class="filters">
+<!-- フィルタートグル -->
+<button id="toggleFilter" class="toggle-btn">＋ フィルターを開く</button>
 
-  <!-- 単価種別 -->
+<div class="filters" id="filterBox" style="display:none;">
+
+  <!-- 業種 -->
   <div class="filter-group">
-    <span class="filter-title">単価種別</span>
+    <span class="filter-title">業種</span>
+    <div class="tags">
+      <button class="tag" data-name="industry" data-value="アウトバウンド">アウトバウンド</button>
+      <button class="tag" data-name="industry" data-value="インバウンド">インバウンド</button>
+      <button class="tag" data-name="industry" data-value="通信">通信</button>
+      <button class="tag" data-name="industry" data-value="営業">営業</button>
+      <button class="tag" data-name="industry" data-value="事務">事務</button>
+      <button class="tag" data-name="industry" data-value="その他">その他</button>
+    </div>
+  </div>
+
+  <!-- 単価 -->
+  <div class="filter-group">
+    <span class="filter-title">単価</span>
     <div class="tags">
       <button class="tag" data-name="salaryType" data-value="時給">時給</button>
       <button class="tag" data-name="salaryType" data-value="日給">日給</button>
@@ -26,12 +42,12 @@
     </div>
   </div>
 
-  <!-- 並び替え -->
+  <!-- 交通費 -->
   <div class="filter-group">
-    <span class="filter-title">並び替え</span>
+    <span class="filter-title">交通費</span>
     <div class="tags">
-      <button class="tag" data-name="sort" data-value="desc">高 → 低</button>
-      <button class="tag" data-name="sort" data-value="asc">低 → 高</button>
+      <button class="tag" data-name="transport" data-value="別">別</button>
+      <button class="tag" data-name="transport" data-value="込">込</button>
     </div>
   </div>
 
@@ -42,16 +58,6 @@
       <button class="tag" data-name="holiday" data-value="シフト制">シフト制</button>
       <button class="tag" data-name="holiday" data-value="土日">土日</button>
       <button class="tag" data-name="holiday" data-value="土日祝">土日祝</button>
-    </div>
-  </div>
-
-  <!-- 経験 -->
-  <div class="filter-group">
-    <span class="filter-title">経験</span>
-    <div class="tags">
-      <button class="tag" data-name="experience" data-value="未経験">未経験</button>
-      <button class="tag" data-name="experience" data-value="微経験">微経験</button>
-      <button class="tag" data-name="experience" data-value="経験">経験</button>
     </div>
   </div>
 
@@ -70,25 +76,13 @@
     </div>
   </div>
 
-  <!-- 業種 -->
+  <!-- 経験 -->
   <div class="filter-group">
-    <span class="filter-title">業種</span>
+    <span class="filter-title">経験</span>
     <div class="tags">
-      <button class="tag" data-name="industry" data-value="アウトバウンド">アウトバウンド</button>
-      <button class="tag" data-name="industry" data-value="インバウンド">インバウンド</button>
-      <button class="tag" data-name="industry" data-value="通信">通信</button>
-      <button class="tag" data-name="industry" data-value="営業">営業</button>
-      <button class="tag" data-name="industry" data-value="事務">事務</button>
-      <button class="tag" data-name="industry" data-value="その他">その他</button>
-    </div>
-  </div>
-
-  <!-- 交通費 -->
-  <div class="filter-group">
-    <span class="filter-title">交通費</span>
-    <div class="tags">
-      <button class="tag" data-name="transport" data-value="別">別</button>
-      <button class="tag" data-name="transport" data-value="込">込</button>
+      <button class="tag" data-name="experience" data-value="未経験">未経験</button>
+      <button class="tag" data-name="experience" data-value="微経験">微経験</button>
+      <button class="tag" data-name="experience" data-value="経験">経験</button>
     </div>
   </div>
 
