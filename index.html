@@ -16,22 +16,60 @@
   
 <div class="filters">
 
-  <select id="filterIndustry">
-    <option value="">業種すべて</option>
-  </select>
+  <div>
+    <strong>休み</strong><br>
+    <label><input type="checkbox" name="holiday" value="シフト制">シフト制</label>
+    <label><input type="checkbox" name="holiday" value="土日">土日</label>
+    <label><input type="checkbox" name="holiday" value="土日祝">土日祝</label>
+  </div>
 
-  <select id="filterExperience">
-    <option value="">経験すべて</option>
-  </select>
+  <div>
+    <strong>経験</strong><br>
+    <label><input type="checkbox" name="experience" value="未経験">未経験</label>
+    <label><input type="checkbox" name="experience" value="微経験">微経験</label>
+    <label><input type="checkbox" name="experience" value="経験">経験</label>
+  </div>
 
-  <select id="filterHoliday">
-    <option value="">休みすべて</option>
-  </select>
+  <div>
+    <strong>エリア</strong><br>
+    <label><input type="checkbox" name="area" value="東京">東京</label>
+    <label><input type="checkbox" name="area" value="千葉">千葉</label>
+    <label><input type="checkbox" name="area" value="埼玉">埼玉</label>
+    <label><input type="checkbox" name="area" value="神奈川">神奈川</label>
+    <label><input type="checkbox" name="area" value="大阪">大阪</label>
+    <label><input type="checkbox" name="area" value="福岡">福岡</label>
+    <label><input type="checkbox" name="area" value="愛知">愛知</label>
+    <label><input type="checkbox" name="area" value="地方">地方</label>
+  </div>
 
-  <div class="price-filter">
-    単価
-    <input type="number" id="minPrice" placeholder="最低"> 〜
-    <input type="number" id="maxPrice" placeholder="最高">
+  <div>
+    <strong>業種</strong><br>
+    <label><input type="checkbox" name="industry" value="アウトバウンド">アウトバウンド</label>
+    <label><input type="checkbox" name="industry" value="インバウンド">インバウンド</label>
+    <label><input type="checkbox" name="industry" value="通信">通信</label>
+    <label><input type="checkbox" name="industry" value="営業">営業</label>
+    <label><input type="checkbox" name="industry" value="事務">事務</label>
+    <label><input type="checkbox" name="industry" value="その他">その他</label>
+  </div>
+
+  <div>
+    <strong>交通費</strong><br>
+    <label><input type="checkbox" name="transport" value="別">別</label>
+    <label><input type="checkbox" name="transport" value="込">込</label>
+  </div>
+
+  <div>
+    <strong>単価</strong><br>
+    <label><input type="checkbox" id="highPrice">高単価</label>
+  </div>
+
+  <div>
+    <strong>並び替え</strong><br>
+    <select id="sortPrice">
+      <option value="">なし</option>
+      <option value="asc">単価：低 → 高</option>
+      <option value="desc">単価：高 → 低</option>
+    </select>
   </div>
 
 </div>
