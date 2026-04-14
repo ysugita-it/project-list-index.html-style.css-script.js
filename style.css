@@ -40,52 +40,38 @@ h1 {
   line-height: 1.6;
 }
 
-/* フィルター全体 */
 .filters {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 16px;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
-/* 各フィルターボックス */
-.filters div {
-  background: #ffffff;
-  padding: 12px;
-  border-radius: 12px;
-  min-height: 140px; /* 高さ統一 */
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  display: flex;
-  flex-direction: column;
+.filter-group {
+  margin-bottom: 12px;
 }
 
-/* タイトル */
-.filters strong {
-  font-size: 14px;
-  margin-bottom: 6px;
-}
-
-/* チェックボックス */
-.filters label {
+.filter-title {
   font-size: 13px;
-  margin-bottom: 4px;
+  font-weight: bold;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  background: #fff;
+  font-size: 13px;
   cursor: pointer;
 }
 
-/* セレクトボックス */
-.filters select {
-  margin-top: 8px;
-  padding: 6px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-/* 高単価チェック */
-#highPrice {
-  margin-right: 6px;
-}
-
-body {
-  background: #f5f6f8;
-  font-family: sans-serif;
+.tag.active {
+  background: #2557a7;
+  color: white;
+  border-color: #2557a7;
 }
