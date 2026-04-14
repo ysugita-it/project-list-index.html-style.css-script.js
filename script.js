@@ -1,4 +1,45 @@
-const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2WSZGibHfo4AHqFYWbQHpLqqrCM-181WQpJx22zjPFKr9UzGRPd4fZhtnE4lTTPZ_WsIm7xJpj8wG/pub?output=csv";
+const sheetURL = "YOUR_CSV_URL";
+
+// =====================
+// CSVパーサー（完全版）
+// =====================
+function parseCSV(text) {
+  const rows = [];
+  let row = [];
+  let current = '';
+  let insideQuotes = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    const next = text[i + 1];
+
+    if (char === '"' && insideQuotes && next === '"') {
+      current += '"';
+      i++;
+    } else if (char === '"') {
+      insideQuotes = !insideQuotes;
+    } else if (char === ',' && !insideQuotes) {
+      row.push(current);
+      current = '';
+    } else if ((char === '\n' || char === '\r') && !insideQuotes) {
+      if (current || row.length) {
+        row.push(current);
+        rows.push(row);
+        row = [];
+        current = '';
+      }
+    } else {
+      current += char;
+    }
+  }
+
+  if (current || row.length) {
+    row.push(current);
+    rows.push(row);
+  }
+
+  return rows;
+}
 
 // =====================
 // データ取得
@@ -22,7 +63,7 @@ fetch(sheetURL)
       const priceText = cols[1] || "";
       const price = parseInt(priceText.replace(/[^0-9]/g,"")) || 0;
 
-      // 単価種別判定
+      // 単価種別
       let salaryType = "";
       if(priceText.includes("時給")) salaryType = "時給";
       else if(priceText.includes("日給")) salaryType = "日給";
@@ -63,9 +104,9 @@ document.addEventListener("click", e => {
   if(e.target.classList.contains("tag")){
     const name = e.target.dataset.name;
 
-    // sortは単一選択
     if(name === "sort"){
-      document.querySelectorAll(`.tag[data-name="sort"]`).forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(`.tag[data-name="sort"]`)
+        .forEach(t => t.classList.remove("active"));
     }
 
     e.target.classList.toggle("active");
@@ -121,11 +162,4 @@ function applyFilters(){
     });
     sorted.forEach(c => container.appendChild(c));
   }
-}
-
-// =====================
-// CSVパース
-// =====================
-function parseCSV(text){
-  return text.split("\n").map(r=>r.split(","));
 }
