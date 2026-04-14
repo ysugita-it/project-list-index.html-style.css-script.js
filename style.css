@@ -77,13 +77,17 @@ h1 {
 }
 
 .toggle-btn {
+  display: block;
   width: 100%;
-  padding: 14px 16px; /* ←大きく */
-  font-size: 15px;
-  font-weight: bold;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
+  max-width: 400px;  /* ← ここ揃える */
+  margin-bottom: 12px;
+  padding: 12px;
+  font-size: 14px;
+  text-align: left;
+
+  background: #333;
+  color: #fff;
+  border-radius: 8px;
 }
 
 .toggle-btn {
