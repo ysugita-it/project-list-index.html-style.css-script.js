@@ -163,3 +163,16 @@ function applyFilters(){
     sorted.forEach(c => container.appendChild(c));
   }
 }
+
+const toggleBtn = document.getElementById("toggleFilter");
+const filterBox = document.getElementById("filterBox");
+
+toggleBtn.addEventListener("click", () => {
+  if(filterBox.style.display === "none"){
+    filterBox.style.display = "block";
+    toggleBtn.textContent = "− フィルターを閉じる";
+  } else {
+    filterBox.style.display = "none";
+    toggleBtn.textContent = "＋ フィルターを開く";
+  }
+});
