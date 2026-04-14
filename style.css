@@ -77,11 +77,20 @@ h1 {
 }
 
 .toggle-btn {
-  margin-bottom: 10px;
-  padding: 8px 12px;
+  width: 100%;
+  padding: 14px 16px; /* ←大きく */
+  font-size: 15px;
+  font-weight: bold;
   border: none;
-  background: #2557a7;
-  color: white;
-  border-radius: 6px;
+  border-radius: 10px;
   cursor: pointer;
+}
+
+.toggle-btn {
+  background: #2557a7;
+  color: #fff;
+}
+
+.toggle-btn:hover {
+  opacity: 0.9;
 }
