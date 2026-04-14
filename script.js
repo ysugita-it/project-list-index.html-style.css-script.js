@@ -14,17 +14,19 @@ fetch(sheetURL)
       const card = document.createElement("div");
       card.className = "card";
 
-      // ✅ データ整形（trim超重要）
-      const price = parseInt(cols[1].replace(/[^0-9]/g,"")) || 0;
+      // 🔥 データ整形（ズレ対策：空白・改行除去）
+      const clean = (val) => (val || "").trim().replace(/\s/g, "");
 
-      card.dataset.holiday = (cols[6] || "").trim();
-      card.dataset.experience = (cols[3] || "").trim();
-      card.dataset.area = (cols[4] || "").trim();
-      card.dataset.industry = (cols[8] || "").trim();
-      card.dataset.transport = (cols[2] || "").trim();
+      const price = parseInt((cols[1] || "").replace(/[^0-9]/g,"")) || 0;
+
+      card.dataset.holiday = clean(cols[6]);
+      card.dataset.experience = clean(cols[3]);
+      card.dataset.area = clean(cols[4]);
+      card.dataset.industry = clean(cols[8]);
+      card.dataset.transport = clean(cols[2]);
       card.dataset.price = price;
 
-      // ✅ 表示
+      // 表示
       card.innerHTML = `
         <h2>${cols[0]}</h2>
         <div class="meta">
@@ -46,13 +48,13 @@ fetch(sheetURL)
       container.appendChild(card);
     });
 
-    // 初回フィルター実行
+    // 初回実行（重要）
     applyFilters();
   });
 
 
 // =====================
-// CSVパーサー（改良版）
+// CSVパーサー（改行・カンマ対応）
 // =====================
 function parseCSV(text) {
   const rows = [];
@@ -103,7 +105,7 @@ document.querySelectorAll("input, select").forEach(el => {
 
 function getChecked(name) {
   return Array.from(document.querySelectorAll(`input[name=${name}]:checked`))
-    .map(el => el.value.trim());
+    .map(el => el.value.trim().replace(/\s/g, ""));
 }
 
 function applyFilters() {
@@ -127,6 +129,7 @@ function applyFilters() {
 
     const matchKeyword = text.includes(keyword);
 
+    // 🔥 完全ゆる一致（ズレ対策）
     const matchHoliday = !holiday.length || holiday.some(h => card.dataset.holiday.includes(h));
     const matchExperience = !experience.length || experience.some(e => card.dataset.experience.includes(e));
     const matchArea = !area.length || area.some(a => card.dataset.area.includes(a));
