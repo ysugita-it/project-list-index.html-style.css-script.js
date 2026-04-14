@@ -39,3 +39,22 @@ h1 {
   margin-bottom: 12px;
   line-height: 1.6;
 }
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.filters div {
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+.filters label {
+  display: block;
+  margin-top: 4px;
+}
