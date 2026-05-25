@@ -1,4 +1,15 @@
-const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2WSZGibHfo4AHqFYWbQHpLqqrCM-181WQpJx22zjPFKr9UzGRPd4fZhtnE4lTTPZ_WsIm7xJpj8wG/pub?output=csv";
+const BASE_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2WSZGibHfo4AHqFYWbQHpLqqrCM-181WQpJx22zjPFKr9UzGRPd4fZhtnE4lTTPZ_WsIm7xJpj8wG/pub?output=csv";
+
+// ▼ 各シートのgidをここに入力（URLの gid=XXXXXXXX の数字部分）
+const SHEET_GIDS = [
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2WSZGibHfo4AHqFYWbQHpLqqrCM-181WQpJx22zjPFKr9UzGRPd4fZhtnE4lTTPZ_WsIm7xJpj8wG/pub?gid=0&single=true&output=csv",          // シート1（デフォルト）
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2WSZGibHfo4AHqFYWbQHpLqqrCM-181WQpJx22zjPFKr9UzGRPd4fZhtnE4lTTPZ_WsIm7xJpj8wG/pub?gid=1605259806&single=true&output=csv",  // シート2
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2WSZGibHfo4AHqFYWbQHpLqqrCM-181WQpJx22zjPFKr9UzGRPd4fZhtnE4lTTPZ_WsIm7xJpj8wG/pub?gid=85247055&single=true&output=csv",  // シート3
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2WSZGibHfo4AHqFYWbQHpLqqrCM-181WQpJx22zjPFKr9UzGRPd4fZhtnE4lTTPZ_WsIm7xJpj8wG/pub?gid=1678862542&single=true&output=csv",  // シート4
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2WSZGibHfo4AHqFYWbQHpLqqrCM-181WQpJx22zjPFKr9UzGRPd4fZhtnE4lTTPZ_WsIm7xJpj8wG/pub?gid=1086509056&single=true&output=csv",  // シート5
+];
+
+const SHEET_URLS = SHEET_GIDS.map(gid => gid ? `${BASE_URL}&gid=${gid}` : BASE_URL);
 
 // =====================
 // CSVパーサー
@@ -42,19 +53,20 @@ function parseCSV(text) {
 }
 
 // =====================
-// データ取得
+// データ取得（複数シート並列取得）
 // =====================
-fetch(sheetURL)
-  .then(res => res.text())
-  .then(text => {
+Promise.all(SHEET_URLS.map(url => fetch(url).then(res => res.text())))
+  .then(texts => {
     // ローディング非表示
     document.getElementById("loading").style.display = "none";
 
-    const rows = parseCSV(text);
     const container = document.getElementById("projects");
     container.innerHTML = "";
 
-    rows.slice(1).forEach(cols => {
+    // 全シートの行をまとめて処理（各シートの1行目＝ヘッダーをスキップ）
+    texts.forEach(text => {
+      const rows = parseCSV(text);
+      rows.slice(1).forEach(cols => {
       if (cols.length < 10) return;
 
       const clean = (v) => (v || "").trim().replace(/\s/g, "");
@@ -113,6 +125,7 @@ fetch(sheetURL)
 
       container.appendChild(card);
     });
+    }); // textsのforEach終了
 
     applyFilters();
 
