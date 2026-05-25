@@ -2,7 +2,7 @@ const BASE_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2WSZGibHfo4A
 
 // ▼ 各シートのgidをここに入力（URLの gid=XXXXXXXX の数字部分）
 const SHEET_GIDS = [
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2WSZGibHfo4AHqFYWbQHpLqqrCM-181WQpJx22zjPFKr9UzGRPd4fZhtnE4lTTPZ_WsIm7xJpj8wG/pub?gid=0&single=true&output=csv",          // シート1（デフォルト）
+  "",          // シート1（デフォルト）
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2WSZGibHfo4AHqFYWbQHpLqqrCM-181WQpJx22zjPFKr9UzGRPd4fZhtnE4lTTPZ_WsIm7xJpj8wG/pub?gid=1605259806&single=true&output=csv",  // シート2
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2WSZGibHfo4AHqFYWbQHpLqqrCM-181WQpJx22zjPFKr9UzGRPd4fZhtnE4lTTPZ_WsIm7xJpj8wG/pub?gid=85247055&single=true&output=csv",  // シート3
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2WSZGibHfo4AHqFYWbQHpLqqrCM-181WQpJx22zjPFKr9UzGRPd4fZhtnE4lTTPZ_WsIm7xJpj8wG/pub?gid=1678862542&single=true&output=csv",  // シート4
