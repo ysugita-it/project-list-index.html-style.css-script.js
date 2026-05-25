@@ -1,7 +1,7 @@
 const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2WSZGibHfo4AHqFYWbQHpLqqrCM-181WQpJx22zjPFKr9UzGRPd4fZhtnE4lTTPZ_WsIm7xJpj8wG/pub?output=csv";
 
 // =====================
-// CSVパーサー（完全版）
+// CSVパーサー
 // =====================
 function parseCSV(text) {
   const rows = [];
@@ -47,115 +47,176 @@ function parseCSV(text) {
 fetch(sheetURL)
   .then(res => res.text())
   .then(text => {
+    // ローディング非表示
+    document.getElementById("loading").style.display = "none";
 
     const rows = parseCSV(text);
     const container = document.getElementById("projects");
     container.innerHTML = "";
 
     rows.slice(1).forEach(cols => {
-      if(cols.length < 10) return;
+      if (cols.length < 10) return;
 
-      const clean = (v) => (v || "").trim().replace(/\s/g,"");
+      const clean = (v) => (v || "").trim().replace(/\s/g, "");
 
       const card = document.createElement("div");
       card.className = "card";
 
       const priceText = cols[1] || "";
-      const price = parseInt(priceText.replace(/[^0-9]/g,"")) || 0;
+      const price = parseInt(priceText.replace(/[^0-9]/g, "")) || 0;
 
-      // 単価種別
       let salaryType = "";
-      if(priceText.includes("時給")) salaryType = "時給";
-      else if(priceText.includes("日給")) salaryType = "日給";
-      else if(priceText.includes("月給")) salaryType = "月給";
+      if (priceText.includes("時給")) salaryType = "時給";
+      else if (priceText.includes("日給")) salaryType = "日給";
+      else if (priceText.includes("月給")) salaryType = "月給";
+
+      const isHot = (cols[11] || "").trim() === "○";
+      card.dataset.hot = isHot ? "1" : "0";
+      if (isHot) card.classList.add("card-hot");
 
       card.dataset.price = price;
       card.dataset.salaryType = salaryType;
       card.dataset.holiday = clean(cols[6]);
       card.dataset.experience = clean(cols[3]);
       card.dataset.area = clean(cols[4]);
+      card.dataset.areaRaw = (cols[4] || "").trim();
       card.dataset.industry = clean(cols[8]);
       card.dataset.transport = clean(cols[2]);
 
+      // キーワード検索用にデータ属性にテキストをまとめる
+      card.dataset.searchText = [
+        cols[0], cols[1], cols[2], cols[3],
+        cols[4], cols[6], cols[7], cols[8], cols[9]
+      ].join(" ").toLowerCase();
+
+      const updatedAt = (cols[12] || "").trim();
+
       card.innerHTML = `
-        <h2>${cols[0]}</h2>
+        <div class="card-header">
+          <h2 style="font-weight:700;">${cols[0]}</h2>
+          ${updatedAt ? `<span class="updated-at">${updatedAt}</span>` : ""}
+        </div>
         <div class="meta">
           単価：${cols[1]}<br>
           交通費：${cols[2]}<br>
-          経験：${cols[3]}<br>
-          エリア：${cols[4]}<br>
-          休み：${cols[6]}<br>
-          業種：${cols[8]}<br>
-          担当：${cols[9]}
+          担当：${cols[9]}　／　${cols[10]}
         </div>
         <div>${cols[7]}</div>
+        <div class="badge-row">
+          <span class="badge badge-industry">${cols[8]}</span>
+          <span class="badge badge-area">${cols[4]}</span>
+          <span class="badge badge-exp">${cols[3]}</span>
+          <span class="badge badge-holiday">${cols[6]}</span>
+          ${cols[5] ? `<span class="badge badge-days">${cols[5]}</span>` : ""}
+        </div>
       `;
 
       container.appendChild(card);
     });
 
     applyFilters();
+
+    // エリア固有名詞タグを自動生成
+    const areaSet = new Set();
+    document.querySelectorAll(".card").forEach(card => {
+      const raw = card.dataset.areaRaw || "";
+      raw.split(/[、,，\s]+/).forEach(v => {
+        const t = v.trim();
+        if (t) areaSet.add(t);
+      });
+    });
+
+    const areaDetailBox = document.getElementById("areaDetailTags");
+    if (areaDetailBox) {
+      areaSet.forEach(name => {
+        const btn = document.createElement("button");
+        btn.className = "tag";
+        btn.dataset.name = "areaDetail";
+        btn.dataset.value = name;
+        btn.textContent = name;
+        areaDetailBox.appendChild(btn);
+      });
+    }
+  })
+  .catch(() => {
+    document.getElementById("loading").textContent = "データの取得に失敗しました。";
   });
 
 // =====================
 // タグ操作
 // =====================
 document.addEventListener("click", e => {
-  if(e.target.classList.contains("tag")){
+  if (e.target.classList.contains("tag")) {
     const name = e.target.dataset.name;
 
-    if(name === "sort"){
+    if (name === "sort") {
       document.querySelectorAll(`.tag[data-name="sort"]`)
         .forEach(t => t.classList.remove("active"));
     }
 
     e.target.classList.toggle("active");
     applyFilters();
+    updateResetButton();
   }
 });
 
-function getTagValues(name){
+function getTagValues(name) {
   return Array.from(document.querySelectorAll(`.tag[data-name="${name}"].active`))
-    .map(el => el.dataset.value.trim().replace(/\s/g,""));
+    .map(el => el.dataset.value.trim().replace(/\s/g, ""));
 }
 
 // =====================
 // フィルター
 // =====================
-function applyFilters(){
-
+function applyFilters() {
   const keyword = (document.getElementById("search").value || "").toLowerCase();
 
-  const holiday = getTagValues("holiday");
+  const holiday    = getTagValues("holiday");
   const experience = getTagValues("experience");
-  const area = getTagValues("area");
-  const industry = getTagValues("industry");
-  const transport = getTagValues("transport");
+  const area       = getTagValues("area");
+  const areaDetail = getTagValues("areaDetail");
+  const industry   = getTagValues("industry");
+  const transport  = getTagValues("transport");
   const salaryType = getTagValues("salaryType");
-  const sort = getTagValues("sort")[0];
+  const hot        = getTagValues("hot");
+  const sort       = getTagValues("sort")[0];
 
-  let cards = Array.from(document.querySelectorAll(".card"));
+  const cards = Array.from(document.querySelectorAll(".card"));
+  let visibleCount = 0;
 
   cards.forEach(card => {
-
-    const text = card.innerText.toLowerCase();
+    // innerTextではなくdata属性を使用
+    const text = card.dataset.searchText || "";
 
     const match =
       text.includes(keyword) &&
-      (!holiday.length || holiday.some(v => card.dataset.holiday.includes(v))) &&
+      (!holiday.length    || holiday.some(v    => card.dataset.holiday.includes(v))) &&
       (!experience.length || experience.some(v => card.dataset.experience.includes(v))) &&
-      (!area.length || area.some(v => card.dataset.area.includes(v))) &&
-      (!industry.length || industry.some(v => card.dataset.industry.includes(v))) &&
-      (!transport.length || transport.some(v => card.dataset.transport.includes(v))) &&
-      (!salaryType.length || salaryType.includes(card.dataset.salaryType));
+      (!area.length       || area.some(v       => card.dataset.area.includes(v))) &&
+      (!areaDetail.length || areaDetail.some(v => (card.dataset.areaRaw || "").includes(v))) &&
+      (!industry.length   || industry.some(v   => card.dataset.industry.includes(v))) &&
+      (!transport.length  || transport.some(v  => card.dataset.transport.includes(v))) &&
+      (!salaryType.length || salaryType.includes(card.dataset.salaryType)) &&
+      (!hot.length        || hot.includes(card.dataset.hot));
 
     card.style.display = match ? "block" : "none";
+    if (match) visibleCount++;
   });
 
+  // 件数表示
+  const countEl = document.getElementById("resultCount");
+  if (cards.length > 0) {
+    countEl.textContent = `${visibleCount} 件表示中`;
+  }
+
+  // 空状態表示
+  const emptyEl = document.getElementById("emptyState");
+  emptyEl.style.display = (cards.length > 0 && visibleCount === 0) ? "block" : "none";
+
   // ソート
-  if(sort){
+  if (sort) {
     const container = document.getElementById("projects");
-    const sorted = cards.sort((a,b)=>{
+    const sorted = cards.sort((a, b) => {
       return sort === "asc"
         ? a.dataset.price - b.dataset.price
         : b.dataset.price - a.dataset.price;
@@ -164,23 +225,37 @@ function applyFilters(){
   }
 }
 
-const toggleBtn = document.getElementById("toggleFilter");
-const filterBox = document.getElementById("filterBox");
+// =====================
+// リセットボタン制御
+// =====================
+function updateResetButton() {
+  const hasActive = document.querySelectorAll(".tag.active").length > 0;
+  document.getElementById("resetFilter").style.display = hasActive ? "inline-flex" : "none";
+}
 
+document.getElementById("resetFilter").addEventListener("click", () => {
+  document.querySelectorAll(".tag.active").forEach(t => t.classList.remove("active"));
+  applyFilters();
+  updateResetButton();
+});
+
+// =====================
+// 検索入力
+// =====================
+document.getElementById("search").addEventListener("input", applyFilters);
+
+// =====================
+// トグルボタン（イベント重複なし）
+// =====================
 document.addEventListener("DOMContentLoaded", () => {
-
   const toggleBtn = document.getElementById("toggleFilter");
   const filterBox = document.getElementById("filterBox");
 
-  if(!toggleBtn || !filterBox) return;
+  if (!toggleBtn || !filterBox) return;
 
   toggleBtn.addEventListener("click", () => {
     const isHidden = filterBox.style.display === "none";
-
     filterBox.style.display = isHidden ? "block" : "none";
-    toggleBtn.textContent = isHidden
-      ? "検索条件を閉じる"
-      : "検索条件の選択";
+    toggleBtn.textContent = isHidden ? "▲ 検索条件を閉じる" : "▼ 検索条件の選択";
   });
-
 });
