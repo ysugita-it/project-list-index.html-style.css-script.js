@@ -1,12 +1,12 @@
 const BASE_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2WSZGibHfo4AHqFYWbQHpLqqrCM-181WQpJx22zjPFKr9UzGRPd4fZhtnE4lTTPZ_WsIm7xJpj8wG/pub?output=csv";
 
-// ▼ 各シートのgidをここに入力（URLの gid=XXXXXXXX の数字部分）
-const SHEET_GIDS = [
-  "",          // シート1（デフォルト）
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2WSZGibHfo4AHqFYWbQHpLqqrCM-181WQpJx22zjPFKr9UzGRPd4fZhtnE4lTTPZ_WsIm7xJpj8wG/pub?gid=1605259806&single=true&output=csv",  // シート2
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2WSZGibHfo4AHqFYWbQHpLqqrCM-181WQpJx22zjPFKr9UzGRPd4fZhtnE4lTTPZ_WsIm7xJpj8wG/pub?gid=85247055&single=true&output=csv",  // シート3
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2WSZGibHfo4AHqFYWbQHpLqqrCM-181WQpJx22zjPFKr9UzGRPd4fZhtnE4lTTPZ_WsIm7xJpj8wG/pub?gid=1678862542&single=true&output=csv",  // シート4
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2WSZGibHfo4AHqFYWbQHpLqqrCM-181WQpJx22zjPFKr9UzGRPd4fZhtnE4lTTPZ_WsIm7xJpj8wG/pub?gid=1086509056&single=true&output=csv",  // シート5
+// ▼ 各シートの公開CSVURLを直接貼り付けてください
+const SHEET_URLS = [
+  "https://docs.google.com/spreadsheets/d/e/XXXXX/pub?output=csv",            // シート1
+  "https://docs.google.com/spreadsheets/d/e/XXXXX/pub?output=csv&gid=111111", // シート2
+  "https://docs.google.com/spreadsheets/d/e/XXXXX/pub?output=csv&gid=222222", // シート3
+  "https://docs.google.com/spreadsheets/d/e/XXXXX/pub?output=csv&gid=333333", // シート4
+  "https://docs.google.com/spreadsheets/d/e/XXXXX/pub?output=csv&gid=444444", // シート5
 ];
 
 const SHEET_URLS = SHEET_GIDS.map(gid => gid ? `${BASE_URL}&gid=${gid}` : BASE_URL);
