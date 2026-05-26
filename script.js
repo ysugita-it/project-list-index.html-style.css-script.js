@@ -78,7 +78,8 @@ Promise.all(SHEET_URLS.map(url => fetch(url).then(res => res.text())))
       else if (priceText.includes("日給")) salaryType = "日給";
       else if (priceText.includes("月給")) salaryType = "月給";
 
-      const isHot = (cols[11] || "").trim() === "○";
+      const hotVal = (cols[11] || "").trim().replace(/\s/g, "");
+      const isHot = hotVal === "○" || hotVal === "〇" || hotVal.toLowerCase() === "o";
       card.dataset.hot = isHot ? "1" : "0";
       if (isHot) card.classList.add("card-hot");
 
