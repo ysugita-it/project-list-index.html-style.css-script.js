@@ -71,19 +71,27 @@ Promise.all(SHEET_URLS.map(url => fetch(url).then(res => res.text())))
       card.className = "card";
 
       const priceText = cols[1] || "";
-      const price = parseInt(priceText.replace(/[^0-9]/g, "")) || 0;
+      const priceRaw = parseInt(priceText.replace(/[^0-9]/g, "")) || 0;
 
       let salaryType = "";
-      if (priceText.includes("時給")) salaryType = "時給";
-      else if (priceText.includes("日給")) salaryType = "日給";
-      else if (priceText.includes("月給")) salaryType = "月給";
+      let normalizedPrice = 0; // ソート用に月換算した単価
+      if (priceText.includes("時給")) {
+        salaryType = "時給";
+        normalizedPrice = priceRaw * 168;
+      } else if (priceText.includes("日給")) {
+        salaryType = "日給";
+        normalizedPrice = priceRaw * 20;
+      } else if (priceText.includes("月給")) {
+        salaryType = "月給";
+        normalizedPrice = priceRaw * 1;
+      }
 
       const hotVal = (cols[11] || "").trim().replace(/\s/g, "");
       const isHot = hotVal === "○" || hotVal === "〇" || hotVal.toLowerCase() === "o";
       card.dataset.hot = isHot ? "1" : "0";
       if (isHot) card.classList.add("card-hot");
 
-      card.dataset.price = price;
+      card.dataset.price = normalizedPrice;
       card.dataset.salaryType = salaryType;
       card.dataset.holiday = clean(cols[6]);
       card.dataset.experience = clean(cols[3]);
@@ -160,11 +168,13 @@ document.addEventListener("click", e => {
     const name = e.target.dataset.name;
 
     if (name === "sort") {
-      // 同じボタンを押したらオフ、別ボタンを押したら切り替え
+      // 同じボタン→オフ、別ボタン→切り替え
       const isActive = e.target.classList.contains("active");
       document.querySelectorAll(`.tag[data-name="sort"]`)
         .forEach(t => t.classList.remove("active"));
-      if (!isActive) e.target.classList.add("active");
+      if (!isActive) {
+        e.target.classList.add("active");
+      }
       applyFilters();
       updateResetButton();
       return;
