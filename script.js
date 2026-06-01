@@ -239,16 +239,21 @@ function applyFilters() {
   const emptyEl = document.getElementById("emptyState");
   emptyEl.style.display = (cards.length > 0 && visibleCount === 0) ? "block" : "none";
 
-  // ソート
+  // ソート（表示中カードのみ対象）
+  const container = document.getElementById("projects");
+  const visibleCards = cards.filter(c => c.style.display !== "none");
+  const hiddenCards  = cards.filter(c => c.style.display === "none");
+
   if (sort) {
-    const container = document.getElementById("projects");
-    const sorted = cards.sort((a, b) => {
-      return sort === "asc"
-        ? a.dataset.price - b.dataset.price
-        : b.dataset.price - a.dataset.price;
+    visibleCards.sort((a, b) => {
+      const pa = parseInt(a.dataset.price) || 0;
+      const pb = parseInt(b.dataset.price) || 0;
+      return sort === "asc" ? pa - pb : pb - pa;
     });
-    sorted.forEach(c => container.appendChild(c));
   }
+
+  // 表示カードを先に、非表示カードを後に並べ直す
+  [...visibleCards, ...hiddenCards].forEach(c => container.appendChild(c));
 }
 
 // =====================
