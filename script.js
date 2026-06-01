@@ -201,7 +201,7 @@ function applyFilters() {
     const match =
       text.includes(keyword) &&
       (!holiday.length    || holiday.some(v    => card.dataset.holiday.includes(v))) &&
-      (!experience.length || experience.some(v => card.dataset.experience.includes(v))) &&
+      (!experience.length || experience.some(v => card.dataset.experience === v)) &&
       (!area.length       || area.some(v       => card.dataset.area.includes(v))) &&
       (!areaDetail.length || areaDetail.some(v => (card.dataset.areaRaw || "").includes(v))) &&
       (!industry.length   || industry.some(v   => card.dataset.industry.includes(v))) &&
