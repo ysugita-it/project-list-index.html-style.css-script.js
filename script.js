@@ -160,8 +160,14 @@ document.addEventListener("click", e => {
     const name = e.target.dataset.name;
 
     if (name === "sort") {
+      // 同じボタンを押したらオフ、別ボタンを押したら切り替え
+      const isActive = e.target.classList.contains("active");
       document.querySelectorAll(`.tag[data-name="sort"]`)
         .forEach(t => t.classList.remove("active"));
+      if (!isActive) e.target.classList.add("active");
+      applyFilters();
+      updateResetButton();
+      return;
     }
 
     e.target.classList.toggle("active");
